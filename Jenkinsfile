@@ -12,6 +12,13 @@ pipeline {
                 sh './jenkins/scripts/test.sh'
             }
         }
+	stage('OWASP DependencyCheck') {
+		steps {
+			//dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'Default'
+			dependencyCheck additionalArguments: '--project WORKSPACE', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+		}
+	}
         stage('Deliver') { 
             steps {
                 sh './jenkins/scripts/deliver.sh' 
